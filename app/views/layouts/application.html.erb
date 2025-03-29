@@ -23,23 +23,12 @@
   </head>
 
   <body>
-    <header>
-      <nav>
-        <%= link_to (image_tag "logo.png", alt: "Logo"), root_path %>
-        <ul>
-          <li>
-            <%= link_to "All movies", movies_path %>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <%= render "layouts/header" %>
 
     <div class="content">
       <%= yield %>
     </div>
 
-    <footer>
-      <p>Copyright &copy; Zsolt Szalma, <%= Time.now.year %></p>
-    </footer>
+    <%= render "layouts/footer" %>
   </body>
 </html>
