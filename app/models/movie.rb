@@ -32,4 +32,26 @@ class Movie < ApplicationRecord
   def flop?
     total_gross.blank? || total_gross < 225_000_000
   end
+
+  def cult?
+    reviews.size > 50 && average_stars >= 4.5
+  end
+
+  def average_stars
+    if reviews.size.zero?
+      0.0
+    else
+      # Calculate the average of the stars from the reviews
+      # and round it to 2 decimal places
+      # This assumes that the reviews table has a column named 'stars'
+      # and that it contains integer values between 1 and 5
+      # The average is calculated using ActiveRecord's average method
+      # and rounded to 2 decimal places
+      reviews.average(:stars).round(2)
+    end
+  end
+
+  def average_stars_as_percent
+    average_stars * 100 / 5
+  end
 end
