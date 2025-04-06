@@ -1,0 +1,9 @@
+<section class="user">
+  <h1><%= @user.name %></h1>
+  <%= profile_image(@user) %>
+  
+  <h2><%= mail_to(@user.email) %></h2>
+  <p>
+    Member since <%= @user.created_at.strftime("%B %Y") %>
+  </p>
+</section>
