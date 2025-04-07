@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   validates :name, presence: true
-  validates :username, uniqueness: { case_sensitive: false }
+  validates :username, uniqueness: { case_sensitive: false, allow_blank: true }
   validates :email,
     format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i },
     uniqueness: { case_sensitive: false }
