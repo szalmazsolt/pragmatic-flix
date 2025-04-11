@@ -14,6 +14,9 @@
         <li>
           <%= link_to "Accout settings", edit_user_path(current_user) %>
         </li>
+        <li>
+          <%= link_to "Sign out", session_path, data: { turbo_method: :delete }, class: "button" %>
+        </li>
       <% else %>
         <li>
           <%= link_to "Sign In", signin_path, class: "button" %>
