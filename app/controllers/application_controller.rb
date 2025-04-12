@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
     def current_user
       # Memoization
-      # User.find get called only once during the same request
+      # User.find gets called only once during the same request
       # even though we refer to current_user three times in our _header file.
       # For this to work, we need to set an instance variable with the 'or-equals' operator
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
@@ -31,4 +31,14 @@ class ApplicationController < ActionController::Base
     end
 
     helper_method :current_user_same_as?
+
+    def current_user_admin?
+      current_user && current_user.admin?
+    end
+
+    helper_method :current_user_admin?
+
+    def require_admin
+      redirect_to root_url unless current_user_admin?
+    end
 end
