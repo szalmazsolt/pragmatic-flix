@@ -11,11 +11,12 @@
   <p>
     Member since <%= @user.created_at.strftime("%B %Y") %>
   </p>
-  <% if current_user_same_as?(@user) %>
+  <% if current_user_same_as?(@user) || current_user_admin? %>
     <div class="actions">
       <%= link_to "Edit Account", edit_user_path(@user), class: "button edit" %>
-
-      <%= link_to "Delete Account", @user, data: {turbo_method: :delete, turbo_confirm: "Are you sure? "}, class: "button delete" %>
-    </div>
   <% end %>
+  <% if current_user_admin? %>
+      <%= link_to "Delete Account", @user, data: {turbo_method: :delete, turbo_confirm: "Are you sure? "}, class: "button delete" %>
+  <% end %>
+    </div>
 </section>
