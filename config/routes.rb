@@ -21,4 +21,6 @@ Rails.application.routes.draw do
 
   get "signin", to: "sessions#new"
   resource :session, only: [ :new, :create, :destroy ]
+
+  resources :favorites
 end
