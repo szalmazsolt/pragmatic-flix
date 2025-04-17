@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :movies do
     resources :reviews
+    resources :favorites, only: [ :create, :destroy ]
   end
 
   get "signup", to: "users#new"
@@ -21,6 +22,4 @@ Rails.application.routes.draw do
 
   get "signin", to: "sessions#new"
   resource :session, only: [ :new, :create, :destroy ]
-
-  resources :favorites
 end
