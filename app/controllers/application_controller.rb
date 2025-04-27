@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     end
 
     def require_correct_user
-      @user = User.find(params[:id])
+      @user = User.find_by!(username: params[:id])
       redirect_to root_url, status: :see_other unless current_user_same_as?(@user) || current_user_admin?
     end
 

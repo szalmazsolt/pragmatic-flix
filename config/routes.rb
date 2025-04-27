@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "movies#index"
 
+  get "movies/filter/:filter", to: "movies#index", as: :filtered_movies
+
   resources :movies do
     resources :reviews
     resources :favorites, only: [ :create, :destroy ]

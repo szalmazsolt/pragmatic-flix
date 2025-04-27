@@ -1,5 +1,7 @@
 class Movie < ApplicationRecord
-  has_many :reviews, dependent: :destroy
+  before_save :set_slug
+
+  has_many :reviews, -> { order("created_at desc") }, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :fans, through: :favorites, source: :user
   has_many :critics, through: :reviews, source: :user
@@ -7,6 +9,7 @@ class Movie < ApplicationRecord
   has_many :genres, through: :characterizations
 
   validates :title, :released_on, :duration, presence: true
+  validates :title, uniqueness: true
   validates :description, length: { minimum: 25 }
   validates :total_gross, numericality: { greater_than_or_equal_to: 0 }
   validates :image_file_name,
@@ -22,6 +25,8 @@ class Movie < ApplicationRecord
   scope :recent, ->(max = 5) { released.limit(max) }
   scope :hits, -> { released.where("total_gross > ?", 225_000_000).order("total_gross desc") }
   scope :flops, -> { released.where("total_gross < ?", 225_000_000).order("total_gross desc") }
+  scope :grossed_less_than, ->(grossed) { released.where("total_gross < ?", grossed) }
+  scope :grossed_greater_than, ->(grossed) { released.where("total_gross > ?", grossed) }
 
   # def self.hits
   #   where(total_gross: 225_000_000..).order(total_gross: :desc)
@@ -60,5 +65,16 @@ class Movie < ApplicationRecord
 
   def average_stars_as_percent
     average_stars * 100 / 5
+  end
+
+  def to_param
+    slug
+  end
+
+  private
+
+  def set_slug
+    # we need to use self here, otherwise slug will be treated as a local variable, not an attribute of a movie object
+    self.slug = title.parameterize
   end
 end
