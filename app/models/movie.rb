@@ -18,6 +18,8 @@ class Movie < ApplicationRecord
   RATINGS = %w[G PG PG-13 R NC-17]
   validates :rating, inclusion: { in: RATINGS }
 
+  validate :acceptable_image
+
   scope :released, -> { where("released_on < ?", Time.now).order("released_on desc") }
   scope :upcoming, -> { where("released_on > ?", Time.now).order("released_on asc") }
   scope :recent, ->(max = 5) { released.limit(max) }
@@ -74,5 +76,17 @@ class Movie < ApplicationRecord
   def set_slug
     # we need to use self here, otherwise slug will be treated as a local variable, not an attribute of a movie object
     self.slug = title.parameterize
+  end
+
+  def acceptable_image
+    return unless main_image.attached?
+
+    unless main_image.blob.byte_size <= 1.megabyte
+      errors.add(:main_image, "is too big (max. 1MB)")
+    end
+
+    unless [ "image/jpeg", "image/png" ].include?(main_image.blob.content_type)
+      errors.add(:main_image, "must be JPEG or PNG")
+    end
   end
 end
